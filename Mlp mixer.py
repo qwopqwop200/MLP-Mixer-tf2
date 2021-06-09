@@ -59,8 +59,7 @@ class MixerBlock(layers.Layer):
         return self.mlp2(self.layernorm2(x)) + x    
 
 class MLPMixer(keras.Model):
-    def __init__(self,embed_dim=32,token_dim=32, channel_dim=128,num_layers= 8,
-                 patch_size = 16,num_classes = 1000,patch_method='conv'):
+    def __init__(self,embed_dim=32,token_dim=32, channel_dim=128,num_layers= 8,patch_size = 16,num_classes = 1000,patch_method='conv'):
         super().__init__()
         self.patch_img = Patch_image(embed_dim,patch_size,patch_method)
         self.mixer_blocks = [MixerBlock(token_dim, channel_dim) for _ in range(num_layers)]
@@ -69,9 +68,7 @@ class MLPMixer(keras.Model):
         self.mlp_head = layers.Dense(num_classes)
 
     def call(self, x):
-        print(x.shape)
         x = self.patch_img(x)
-        print(x.shape)
         for mixer_block in self.mixer_blocks:
             x = mixer_block(x)
         x = self.layer_norm(x)
